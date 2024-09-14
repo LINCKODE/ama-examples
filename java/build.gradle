@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+}
+
+group = 'org.qubic'
+version = '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    maven {
+        url = 'https://maven.pkg.github.com/qubic/java-archiver-proto'
+        credentials {
+            username = githubUsername ?: System.getenv("GITHUB_USERNAME")
+            password = githubToken ?: System.getenv("GITHUB_TOKEN")
+        }
+    }
+}
+
+def grpcVersion = '1.66.0' // CURRENT_GRPC_VERSION
+def protobufVersion = '3.25.3'
+def protocVersion = protobufVersion
+
+dependencies {
+    runtimeOnly 'io.grpc:grpc-netty-shaded:1.66.0'
+    implementation "io.grpc:grpc-protobuf:${grpcVersion}"
+    implementation "io.grpc:grpc-services:${grpcVersion}"
+    implementation "io.grpc:grpc-stub:${grpcVersion}"
+    compileOnly "org.apache.tomcat:annotations-api:6.0.53"
+    implementation "com.google.protobuf:protobuf-java-util:${protobufVersion}"
+
+
+    implementation 'org.qubic.archiver:proto:dev-SNAPSHOT'
+    testImplementation platform('org.junit:junit-bom:5.10.0')
+    testImplementation 'org.junit.jupiter:junit-jupiter'
+}
+
+test {
+    useJUnitPlatform()
+}
